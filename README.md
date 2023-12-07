@@ -70,4 +70,4 @@ Now it's time to create your first docker swarm!
 
 7) Install a separate Portainer stack inside the cluster. Show a visualization of the distribution of tasks over the nodes using the Portainer in the report.
 
-💡 [Click here](https://forms.yandex.ru/cloud/6475b911c09c0225003a0fd6/), **to share feedback on this project with us**. It's anonymous and will help the Pedago team make your learning better.
+💡 [Click here](https://forms.yandex.ru/cloud/6475b911c09c0225003a0fd6/), **to share feedback on this project with us**. It's anonymous and will help the Product team make your learning better.

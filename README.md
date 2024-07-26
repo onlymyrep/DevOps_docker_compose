@@ -2,6 +2,8 @@
 
 The use of docker compose and docker swarm tools to run containers together and orchestrate them in a simple way.
 
+💡 [Tap here](https://new.oprosso.net/p/4cb31ec3f47a4596bc758ea1861fb624) **to leave your feedback on the project**. It's anonymous and will help our team make your educational experience better. We recommend completing the survey immediately after the project.
+
 ## Contents
 
 1. [Chapter I](#chapter-i)
@@ -69,5 +71,3 @@ Now it's time to create your first docker swarm!
 6) Using docker commands, show the distribution of containers by nodes in the report.
 
 7) Install a separate Portainer stack inside the cluster. Show a visualization of the distribution of tasks over the nodes using the Portainer in the report.
-
-💡 [Click here](https://forms.yandex.ru/cloud/6475b911c09c0225003a0fd6/), **to share feedback on this project with us**. It's anonymous and will help the Product team make your learning better.

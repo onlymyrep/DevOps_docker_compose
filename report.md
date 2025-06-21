@@ -29,11 +29,7 @@ EOF
 ```bash
 docker images
 ```
-```
-losiento/session-service    latest   200MB
-losiento/booking-service    latest   198MB
-losiento/gateway-service    latest   202MB
-```
+![images](src/screenshots/docker_images_and_build.png)
 
 ### 2. docker-compose.yml
 ```bash
@@ -71,17 +67,7 @@ docker compose up -d --build
 docker run --network=overlay -v "$(pwd)/src:/etc/newman" -t postman/newman run "application_tests.postman_collection.json"
 ```
 
-Результаты тестирования:
-```
-✅ Все тесты успешно пройдены
-[200 OK] Login User
-[200 OK] Get Hotels
-[200 OK] Get Hotel
-[201 Created] Book Hotel
-[200 OK] Get User's Loyalty Balance
-[200 OK] Get User Reservations
-[204 No Content] Cancel Reservation
-```
+![tests](src/screenshots/run_postman_tests.png)
 
 ---
 
@@ -204,11 +190,7 @@ location /api/v1/gateway {
 ```bash
 docker run --network=overlay -v "$(pwd)/src:/etc/newman" -t postman/newman run "application_tests.postman_collection.json"
 ```
-
-Результаты:
-```
-✅ Все тесты успешно пройдены в Swarm-окружении
-```
+![tests_success](src/screenshots/tests_success.png)
 
 ### 10. Распределение контейнеров
 ```bash

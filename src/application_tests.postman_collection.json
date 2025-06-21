@@ -13,7 +13,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Login as a regular user\", function() {",
-							"    pm.response.to.have.status(200)",
+							"    pm.response.to.have.status(200);",
 							"    pm.collectionVariables.set(\"BEARER\", pm.response.headers.get(\"authorization\"));",
 							"});"
 						],
@@ -22,39 +22,48 @@
 				}
 			],
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [
 					{
-						"key": "authorization",
-						"value": "{{BASIC}}",
+						"key": "Content-Type",
+						"value": "application/json",
 						"type": "default"
 					}
 				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"User\",\n    \"password\": \"qwerty\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": "{{API_HOST}}:{{USERS_PORT}}/api/v1/auth/authorize",
+					"raw": "{{API_HOST}}/api/v1/auth",
 					"host": [
 						"{{API_HOST}}"
 					],
-					"port": "{{USERS_PORT}}",
 					"path": [
 						"api",
 						"v1",
-						"auth",
-						"authorize"
+						"auth"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Get Hotles",
+			"name": "Get Hotels",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
 							"pm.test(\"Get hotels info\", function() {",
-							"    pm.response.to.have.status(200)",
+							"    pm.response.to.have.status(200);",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"HOTEL_UID\", jsonData[0].hotelUid);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -65,17 +74,16 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "authorization",
+						"key": "Authorization",
 						"value": "{{BEARER}}",
 						"type": "default"
 					}
 				],
 				"url": {
-					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/hotels",
+					"raw": "{{API_HOST}}/api/v1/gateway/hotels",
 					"host": [
 						"{{API_HOST}}"
 					],
-					"port": "{{GATEWAY_PORT}}",
 					"path": [
 						"api",
 						"v1",
@@ -93,8 +101,8 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"pm.test(\"Get hotels info\", function() {",
-							"    pm.response.to.have.status(200)",
+							"pm.test(\"Get hotel info\", function() {",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -105,17 +113,16 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "authorization",
+						"key": "Authorization",
 						"value": "{{BEARER}}",
 						"type": "default"
 					}
 				],
 				"url": {
-					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/hotels/{{HOTEL_UID}}",
+					"raw": "{{API_HOST}}/api/v1/gateway/hotels/{{HOTEL_UID}}",
 					"host": [
 						"{{API_HOST}}"
 					],
-					"port": "{{GATEWAY_PORT}}",
 					"path": [
 						"api",
 						"v1",
@@ -135,7 +142,9 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Book hotel\", function() {",
-							"    pm.response.to.have.status(201)",
+							"    pm.response.to.have.status(201);",
+							"    var jsonData = pm.response.json();",
+							"    pm.collectionVariables.set(\"RESERVATION_UID\", jsonData.reservationUid);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -146,14 +155,19 @@
 				"method": "POST",
 				"header": [
 					{
-						"key": "authorization",
+						"key": "Authorization",
 						"value": "{{BEARER}}",
+						"type": "default"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
 						"type": "default"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"hotelUid\":\"{{HOTEL_UID}}\",\n    \"room\": 1,\n    \"paymentInfo\": \"somePaymentInfo\",\n    \"dateInterval\":{\n                \"from\": \"2022-10-18T00:00:00.000000\",\n                \"to\": \"2022-12-18T00:00:00.000000\"\n            },\n            \"roomCost\":2000\n}",
+					"raw": "{\n    \"hotelUid\": \"{{HOTEL_UID}}\",\n    \"startDate\": \"2025-01-01\",\n    \"endDate\": \"2025-01-10\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -161,16 +175,15 @@
 					}
 				},
 				"url": {
-					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/booking",
+					"raw": "{{API_HOST}}/api/v1/gateway/reservations",
 					"host": [
 						"{{API_HOST}}"
 					],
-					"port": "{{GATEWAY_PORT}}",
 					"path": [
 						"api",
 						"v1",
 						"gateway",
-						"booking"
+						"reservations"
 					]
 				}
 			},
@@ -184,7 +197,7 @@
 					"script": {
 						"exec": [
 							"pm.test(\"Get user's loyalty balance\", function() {",
-							"    pm.response.to.have.status(200)",
+							"    pm.response.to.have.status(200);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -195,22 +208,100 @@
 				"method": "GET",
 				"header": [
 					{
-						"key": "authorization",
+						"key": "Authorization",
 						"value": "{{BEARER}}",
 						"type": "default"
 					}
 				],
 				"url": {
-					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/loyalty",
+					"raw": "{{API_HOST}}/api/v1/gateway/loyalty",
 					"host": [
 						"{{API_HOST}}"
 					],
-					"port": "{{GATEWAY_PORT}}",
 					"path": [
 						"api",
 						"v1",
 						"gateway",
 						"loyalty"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Reservations",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get user reservations\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}/api/v1/gateway/reservations",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"reservations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Reservation",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Cancel reservation\", function() {",
+							"    pm.response.to.have.status(204);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}/api/v1/gateway/reservations/{{RESERVATION_UID}}",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"reservations",
+						"{{RESERVATION_UID}}"
 					]
 				}
 			},
@@ -239,8 +330,8 @@
 	],
 	"variable": [
 		{
-			"key": "BASIC",
-			"value": "Basic VXNlcjpxd2VydHk=",
+			"key": "API_HOST",
+			"value": "http://nginx-proxy:8081",
 			"type": "default"
 		},
 		{
@@ -249,28 +340,13 @@
 			"type": "default"
 		},
 		{
-			"key": "API_HOST",
-			"value": "localhost",
-			"type": "default"
-		},
-		{
-			"key": "USERS_PORT",
-			"value": "8081",
-			"type": "default"
-		},
-		{
-			"key": "GATEWAY_PORT",
-			"value": "8087",
-			"type": "default"
-		},
-		{
 			"key": "HOTEL_UID",
-			"value": "9d05ba36-bf8d-11eb-8529-0242ac130003",
+			"value": "",
 			"type": "default"
 		},
 		{
-			"key": "BASIC_ADMIN",
-			"value": "QWRtaW46cXdlcnR5",
+			"key": "RESERVATION_UID",
+			"value": "",
 			"type": "default"
 		}
 	]
